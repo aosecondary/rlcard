@@ -29,6 +29,11 @@ register(
 )
 
 register(
+    env_id='leduc-holdem-state',
+    entry_point='rlcard.envs.leducholdemstate:LeducholdemEnv'
+)
+
+register(
     env_id='uno',
     entry_point='rlcard.envs.uno:UnoEnv',
 )
@@ -41,9 +46,4 @@ register(
 register(
     env_id='gin-rummy',
     entry_point='rlcard.envs.gin_rummy:GinRummyEnv',
-)
-
-register(
-    env_id='bridge',
-    entry_point='rlcard.envs.bridge:BridgeEnv',
 )

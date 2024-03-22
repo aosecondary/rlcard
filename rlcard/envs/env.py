@@ -26,6 +26,8 @@ class Env(object):
         '''
         self.allow_step_back = self.game.allow_step_back = config['allow_step_back']
         self.action_recorder = []
+        self.action_recorder_round = []
+        self.action_recorder_legals = []
 
         # Game specific configurations
         # Currently only support blackjack、limit-holdem、no-limit-holdem
@@ -60,6 +62,8 @@ class Env(object):
         '''
         state, player_id = self.game.init_game()
         self.action_recorder = []
+        self.action_recorder_round = []
+        self.action_recorder_legals = []
         return self._extract_state(state), player_id
 
     def step(self, action, raw_action=False):
@@ -81,6 +85,15 @@ class Env(object):
         self.timestep += 1
         # Record the action for human interface
         self.action_recorder.append((self.get_player_id(), action))
+
+        # Salvo le azioni divise per round
+        while len(self.action_recorder_round) <= self.game.round_counter:
+            self.action_recorder_round.append([])
+            self.action_recorder_legals.append([])
+
+        self.action_recorder_legals[self.game.round_counter].append((self.get_player_id(), self._get_legal_actions()))
+        self.action_recorder_round[self.game.round_counter].append((self.get_player_id(), action))
+
         next_state, player_id = self.game.step(action)
 
         return self._extract_state(next_state), player_id

@@ -34,7 +34,7 @@ class LeducholdemGame(Game):
 
         # Raise amount and allowed times
         self.raise_amount = self.big_blind
-        self.allowed_raise_num = 2
+        self.allowed_raise_num = 8
 
         self.num_players = num_players
 
@@ -131,9 +131,13 @@ class LeducholdemGame(Game):
             self.round_counter += 1
             self.round.start_new_round(self.game_pointer)
 
+        # print("Then we proceed to the next round" , self.game_pointer)
         state = self.get_state(self.game_pointer)
 
         return state, self.game_pointer
+    
+    def round_is_over(self):
+        return self.round.is_over()
 
     def get_state(self, player):
         ''' Return player's state
@@ -147,8 +151,11 @@ class LeducholdemGame(Game):
         chips = [self.players[i].in_chips for i in range(self.num_players)]
         legal_actions = self.get_legal_actions()
         state = self.players[player].get_state(self.public_card, chips, legal_actions)
-        # Fix errore di current_player dissalineato
         state['current_player'] = player
+        state['round_counter'] = self.round_counter
+        state['history'] = self.history
+
+        # Aggiungo lista legal_actions
 
         return state
 

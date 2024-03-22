@@ -210,6 +210,7 @@ class LimitHoldemGame:
         legal_actions = self.get_legal_actions()
         state = self.players[player].get_state(self.public_cards, chips, legal_actions)
         state['raise_nums'] = self.history_raise_nums
+        state['current_player'] = player
 
         return state
 
